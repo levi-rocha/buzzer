@@ -1,0 +1,28 @@
+@CHARSET "ISO-8859-1";
+
+body {
+	height: 100%;
+	width: 100%;
+	text-align: center;
+}
+
+h1 {
+	font-size: 180%; 
+	padding: 0%;
+}
+
+#player {
+	position: absolute;
+	top: 0%;
+	left: 0%;
+	height: 20%;
+	width: 100%;
+}
+
+#buzzer {
+	position: absolute;
+	top: 20%;
+	left: 0%;
+	height: 80%;
+	width: 100%;
+}

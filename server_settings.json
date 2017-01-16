@@ -1,0 +1,7 @@
+{
+	"player_limit"	: 2
+	,
+	"ws_port"		: 8338
+	,
+	"server_port"	: 8008
+}
