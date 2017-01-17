@@ -47,19 +47,14 @@ function giveBirthToSocket() {
 		case 'client disconnected':
 			removeFromConnected(msg.pid);
 			break;
-		case 'first buzz':
-			var pid = msg.pid;
-			if (firstBuzz == 0) {
-				disableBuzz();
-				setFirstBuzz(pid);
-				playBuzzSound(pid);
-			}
+		case 'buzz order':
+			var buzzOrder = msg.order;
+			setBuzzOrder(buzzOrder);
 			break;
 		default:
 			// Nothing
 		}
 	};
-
 	setTimeout(function() {
 		socket.send(JSON.stringify({
 			'id'	: id,
@@ -82,25 +77,25 @@ function removeFromConnected(pid) {
 }
 
 function refreshConnectedDisplay() {
-	var content = "Connected players:<br>";
+	var content = "<h2>Connected players:</h2>";
 	for (var i = 0; i < connectedPlayers.length; i++) {
-		content += "<p>Player "+connectedPlayers[i]+"</p>";
+		content += "<h3>Player "+connectedPlayers[i]+"</h3>";
 	}
 	$('#players').html(content);
 }
 
 function enableBuzz() {
-	$('#bstatus').html("<h2>[ Buzz Enabled ]</h2>");
-	setFirstBuzz(0);
+	$('#bstatus').html("<h2>Buzz: Enabled</h2>");
+	$('#rheader').html("<h2>Buzz order:</h2>");
+	$('#order').html("<h1> Waiting for buzzers...</h1>");
 	socket.send(JSON.stringify({
 		'id'	: id,
 		'label' : 'enable buzz'
 	}));
-	
 }
 
 function disableBuzz() {
-	$('#bstatus').html("<h2>[ Buzz Disabled ]</h2>");
+	$('#bstatus').html("<h2>Buzz: Disabled</h2>");
 	socket.send(JSON.stringify({
 		'id'	: id,
 		'label' : 'disable buzz'
@@ -131,12 +126,20 @@ function playBuzzSound(pid) {
 	buzzAudio[audioToPlay].play();
 }
 
-function setFirstBuzz(pid) {
-	if (pid == 0) {
-		$('#res').html("<h1>[ Waiting ]</h1>");
-	} else {
-		$('#res').html("<h1>Player <b>"+pid+"</b> buzzed first!</h1>");
+function setBuzzOrder(order) {
+	if (order.length == 1) {
+		playBuzzSound(order[0]);
 	}
+	var content = "<h1>";
+	for (var i = 0; i < order.length; i++) {
+		var p = order[i];
+		content += String(p);
+		if (i < order.length-1) {
+			content += " | "
+		}
+	}
+	content += "</h1>";
+	$('#order').html(content);
 }
 
 function hguid() {

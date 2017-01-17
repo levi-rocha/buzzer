@@ -27,7 +27,7 @@ function giveBirthToSocket()
 		case 'accepted client connection':
 			if (msg.id == id) {
 				pid = msg.pid;
-				$('#player').html("<h1>Conncted as Player " + pid + "</h1>");
+				$('#player').html("<h1>Connected as Player " + pid + "</h1>");
 			}
 			break;
 		case 'abort player connection':

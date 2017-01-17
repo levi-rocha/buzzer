@@ -36,6 +36,8 @@ var players = {};
 var numPlayers = 0;
 var sidToPidMap = {};
 
+var buzzOrder = [];
+
 var resetting = 0;
 
 wss.on('close', function() {
@@ -112,11 +114,12 @@ wss.on('connection', function(ws) {
 			break;
 		case 'buzz':
 			if (buzzEnabled) {
-				if (firstBuzz == 0) {
-					firstBuzz = msg.pid
+				var pid = msg.pid;
+				if (buzzOrder.indexOf(pid) == -1) {
+					buzzOrder.push(pid);
 					wss.broadcast(JSON.stringify({
-						'label' : 'first buzz',
-						'pid' : msg.pid
+						'label' : 'buzz order',
+						'order' : buzzOrder
 					}));
 				}
 			}
@@ -124,6 +127,7 @@ wss.on('connection', function(ws) {
 		case 'disable buzz':
 			buzzEnabled = 0;
 			firstBuzz = 0;
+			buzzOrder = [];
 			wss.broadcast(JSON.stringify({
 				'label' : 'disable buzz'
 			}));
@@ -133,7 +137,6 @@ wss.on('connection', function(ws) {
 		}
 	});
 	ws.on('close', function() {
-		console.log(sid + " disconnected");
 		if (!resetting) {
 			var pid = sidToPidMap[sid];
 			if (pid == -1) {
@@ -141,13 +144,13 @@ wss.on('connection', function(ws) {
 				console.log("Host disconnected! Resetting server.");
 				resetting = 1;
 				wss.kick();
-				var hostConnected = 0;
-				var firstBuzz = 0;
-				var connectionsDisabled = 1;
-				var buzzEnabled = 0;
-				var players = {};
-				var numPlayers = 0;
-				var sidToPidMap = {};
+				hostConnected = 0;
+				firstBuzz = 0;
+				connectionsDisabled = 1;
+				buzzEnabled = 0;
+				players = {};
+				numPlayers = 0;
+				sidToPidMap = {};
 				resetting = 0;
 			} else {
 				//client disconnected
@@ -155,6 +158,7 @@ wss.on('connection', function(ws) {
 					console.log("Player " + pid + " diconnected.");
 					numPlayers -= 1;
 					players[pid] = null;
+					sidToPidMap[sid] = null;
 					wss.broadcast(JSON.stringify({
 						'label' : 'client disconnected',
 						'pid'	: pid
@@ -162,15 +166,12 @@ wss.on('connection', function(ws) {
 				}
 			}
 		}
-		
 	});
 });
 
 var getAvailablePID = function() {
 	for (var i = 1; i <= playerLimit; i++) {
 		if (!players[i]) {
-			console.log("content of index: " + players[i]);
-			console.log("logged player " + i);
 			return i;
 		}
 	}
