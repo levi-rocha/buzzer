@@ -18,8 +18,7 @@ var settings = JSON.parse(contents);
 var playerLimit = settings.player_limit;
 var wsPort = parseInt(settings.ws_port);
 var serverPort = settings.server_port;
-
-console.log(wsPort);
+var domainName = settings.domain_name;
 
 var WebSocketServer = require('ws').Server
 var wss = new WebSocketServer({
@@ -186,6 +185,7 @@ var app = express();
 app.use(serveStatic(__dirname));
 app.listen(serverPort);
 console.log("express server running on port " + serverPort);
+console.log("connect with " + domainName + ":"+ serverPort + "/host or /button");
 
 // fetch files via
 // http://cslinux.utm.utoronto.ca:10021/host.html
