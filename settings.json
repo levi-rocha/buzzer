@@ -1,5 +1,5 @@
 settings = 
-{	"server_domain"	: "localhost"
+{	"server_domain"	: "192.168.0.108"
 	,
 	"ws_port"		: 8338
 	,

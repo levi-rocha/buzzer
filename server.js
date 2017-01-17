@@ -18,7 +18,7 @@ var settings = JSON.parse(contents);
 var playerLimit = settings.player_limit;
 var wsPort = parseInt(settings.ws_port);
 var serverPort = settings.server_port;
-var domainName = settings.domain_name;
+var domainName = settings.server_domain;
 
 var WebSocketServer = require('ws').Server
 var wss = new WebSocketServer({
@@ -35,6 +35,8 @@ var buzzEnabled = 0;
 var players = {};
 var numPlayers = 0;
 var sidToPidMap = {};
+
+var resetting = 0;
 
 wss.on('close', function() {
 	console.log('disconnected');
@@ -73,6 +75,7 @@ wss.on('connection', function(ws) {
 					'id'	: msg.id
 				}));
 				sidToPidMap[sid] = -1;
+				console.log("Host sid: " + sid)
 				hostConnected = 1;
 			}
 			break;
@@ -130,30 +133,36 @@ wss.on('connection', function(ws) {
 		}
 	});
 	ws.on('close', function() {
-		var pid = sidToPidMap[sid];
-		if (pid == -1) {
-			//host disconnected
-			console.log("Host disconnected! Resetting server.");
-			wss.kick();
-			var hostConnected = 0;
-			var firstBuzz = 0;
-			var connectionsDisabled = 1;
-			var buzzEnabled = 0;
-			var players = {};
-			var numPlayers = 0;
-			var sidToPidMap = {};
-		} else {
-			//client disconnected
-			if (pid) {
-				console.log("Player " + pid + " diconnected.");
-				numPlayers -= 1;
-				players[pid] = null;
-				wss.broadcast(JSON.stringify({
-					'label' : 'client disconnected',
-					'pid'	: pid
-				}));
+		console.log(sid + " disconnected");
+		if (!resetting) {
+			var pid = sidToPidMap[sid];
+			if (pid == -1) {
+				//host disconnected
+				console.log("Host disconnected! Resetting server.");
+				resetting = 1;
+				wss.kick();
+				var hostConnected = 0;
+				var firstBuzz = 0;
+				var connectionsDisabled = 1;
+				var buzzEnabled = 0;
+				var players = {};
+				var numPlayers = 0;
+				var sidToPidMap = {};
+				resetting = 0;
+			} else {
+				//client disconnected
+				if (pid) {
+					console.log("Player " + pid + " diconnected.");
+					numPlayers -= 1;
+					players[pid] = null;
+					wss.broadcast(JSON.stringify({
+						'label' : 'client disconnected',
+						'pid'	: pid
+					}));
+				}
 			}
 		}
+		
 	});
 });
 
@@ -185,7 +194,7 @@ var app = express();
 app.use(serveStatic(__dirname));
 app.listen(serverPort);
 console.log("express server running on port " + serverPort);
-console.log("connect with " + domainName + ":"+ serverPort + "/host or /button");
+console.log("connect with " + domainName + ":"+ serverPort + "/host.html or /button.html");
 
 // fetch files via
 // http://cslinux.utm.utoronto.ca:10021/host.html
