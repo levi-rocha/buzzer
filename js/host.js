@@ -79,15 +79,15 @@ function removeFromConnected(pid) {
 function refreshConnectedDisplay() {
 	var content = "<h2>Connected players:</h2>";
 	for (var i = 0; i < connectedPlayers.length; i++) {
-		content += "<h3>Player "+connectedPlayers[i]+"</h3>";
+		content += "<h2>Player "+connectedPlayers[i]+"</h2>";
 	}
 	$('#players').html(content);
 }
 
 function enableBuzz() {
-	$('#bstatus').html("<h2>Buzz: Enabled</h2>");
-	$('#rheader').html("<h2>Buzz order:</h2>");
-	$('#order').html("<h1> Waiting for buzzers...</h1>");
+	$('#bstatus').html("<h2>Buzzers: Enabled</h2>");
+	$('#rheader').html("<h1>Buzz order:</h1>");
+	$('#order').html("<h2> Waiting for buzzers...</h2>");
 	socket.send(JSON.stringify({
 		'id'	: id,
 		'label' : 'enable buzz'
@@ -95,7 +95,7 @@ function enableBuzz() {
 }
 
 function disableBuzz() {
-	$('#bstatus').html("<h2>Buzz: Disabled</h2>");
+	$('#bstatus').html("<h2>Buzzers: Disabled</h2>");
 	socket.send(JSON.stringify({
 		'id'	: id,
 		'label' : 'disable buzz'
