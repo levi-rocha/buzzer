@@ -1,5 +1,8 @@
 settings = 
-{	"server_domain"	: "localhost"
+{
+	"player_limit"	: 11
+	,
+	"server_domain"	: "localhost"
 	,
 	"ws_port"		: 8338
 	,

@@ -9,7 +9,7 @@ var socket;
 var sent = 0;
 var firstBuzz = 0;
 var connectionAccepted = 0;
-var connectionsDisabled = 1;
+var connectionsDisabled = 0;
 var buzzAudio = [];
 var id;
 var connectedPlayers = [];
@@ -85,7 +85,7 @@ function refreshConnectedDisplay() {
 }
 
 function enableBuzz() {
-	$('#bstatus').html("<h2>Buzzers: Enabled</h2>");
+	$('#bstatus').html("<h2 class='enabled'>Buzzers: Enabled</h2>");
 	$('#rheader').html("<h1>Buzz order:</h1>");
 	$('#order').html("<h2> Waiting for buzzers...</h2>");
 	socket.send(JSON.stringify({
@@ -95,7 +95,7 @@ function enableBuzz() {
 }
 
 function disableBuzz() {
-	$('#bstatus').html("<h2>Buzzers: Disabled</h2>");
+	$('#bstatus').html("<h2 class='disabled'>Buzzers: Disabled</h2>");
 	socket.send(JSON.stringify({
 		'id'	: id,
 		'label' : 'disable buzz'
@@ -119,7 +119,7 @@ function toggleConnections() {
 
 function playBuzzSound(pid) {
 	var audioToPlay = 0;
-	if (1 <= pid && pid <= 2) {
+	if (1 <= pid && pid <= 11) {
 		audioToPlay = pid;
 	}
 	buzzAudio[audioToPlay].currentTime=0;
@@ -153,9 +153,18 @@ function hguid() {
 }
 
 function loadAudioFiles() {
-	buzzAudio[0] = new Audio("audio/asuka-antabaka.mp3");
+	buzzAudio[0] = new Audio("audio/john-cena.mp3");
 	buzzAudio[1] = new Audio("audio/mayushii-tuturu.mp3");
 	buzzAudio[2] = new Audio("audio/rengechon-nyanpasu.mp3");
+	buzzAudio[3] = new Audio("audio/asuka-antabaka.mp3");
+	buzzAudio[4] = new Audio("audio/pikachu-pikachu.mp3");
+	buzzAudio[5] = new Audio("audio/yuruyuri-akarin.mp3");
+	buzzAudio[6] = new Audio("audio/jojo-ohno.mp3");
+	buzzAudio[7] = new Audio("audio/nico-nii.mp3");
+	buzzAudio[8] = new Audio("audio/shia-doit.mp3");
+	buzzAudio[9] = new Audio("audio/ghost-busters.mp3");
+	buzzAudio[10] = new Audio("audio/air-horns.mp3");
+	buzzAudio[11] = new Audio("audio/dog-bark.mp3");
 }
 
 $(function() {

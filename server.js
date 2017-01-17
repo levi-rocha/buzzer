@@ -72,13 +72,14 @@ wss.on('connection', function(ws) {
 					'id'	: msg.id
 				}));
 			} else {
+				sidToPidMap[sid] = -1;
+				console.log("Host sid: " + sid)
+				hostConnected = 1;
+				connectionsDisabled = 0;
 				wss.broadcast(JSON.stringify({
 					'label' : 'accepted host connection',
 					'id'	: msg.id
 				}));
-				sidToPidMap[sid] = -1;
-				console.log("Host sid: " + sid)
-				hostConnected = 1;
 			}
 			break;
 		case 'client connection':
