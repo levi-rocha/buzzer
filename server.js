@@ -109,6 +109,7 @@ wss.on('connection', function(ws) {
 			break;
 		case 'enable buzz':
 			buzzEnabled = 1;
+			buzzOrder = [];
 			wss.broadcast(JSON.stringify({
 				'label' : 'enable buzz',
 			}));
@@ -127,7 +128,6 @@ wss.on('connection', function(ws) {
 			break;
 		case 'disable buzz':
 			buzzEnabled = 0;
-			firstBuzz = 0;
 			buzzOrder = [];
 			wss.broadcast(JSON.stringify({
 				'label' : 'disable buzz'
