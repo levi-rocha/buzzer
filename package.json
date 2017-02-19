@@ -1,0 +1,55 @@
+{
+  
+"name": "buzzer",
+
+  "version": "1.0.0",
+
+  "description": "A buzzer system implemented using websocket and node.js. Supports up to 12 buzzers with different soundbytes.",
+
+  "main": "server.js",
+
+  "dependencies": 
+{
+
+    "ws": "^0.7.1",
+
+    "serve-static": "^1.9.2",
+
+    "express": "^4.12.3"
+  
+},
+
+  "devDependencies": {},
+
+  "scripts": 
+{
+    "start": "node server.js"
+  
+},
+
+  "repository": 
+{
+
+    "type": "git",
+
+    "url": "git+https://github.com/pino/buzzer.git"
+  
+},
+
+  "keywords": [],
+
+  "author": "",
+
+  "license": "ISC",
+
+  "bugs": 
+{
+    
+    "url": "https://github.com/pino/buzzer/issues"
+  
+},
+
+  "homepage": "https://github.com/pino/buzzer#readme"
+
+}
+
